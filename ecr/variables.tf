@@ -1,27 +1,6 @@
-variable "platform" {
-  description = "Platform name"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
-
 variable "service" {
   description = "Service name"
   type        = string
-}
-
-variable "region" {
-  description = "Region name"
-  type        = string
-}
-
-variable "deployment" {
-  description = "Deployment name"
-  type        = string
-  default     = ""
 }
 
 variable "repo_principals_ro" {
@@ -47,9 +26,4 @@ variable "lifecycle_images_to_keep" {
 variable "image_scanning" {
   type    = bool
   default = true
-}
-
-variable "create_ecr_repository" {
-  type    = bool
-  default = false
 }
