@@ -22,34 +22,41 @@ variable "deployment" {
   description = "Deployment name"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "repo_principals_ro" {
-  type    = list(any)
-  default = []
+  type     = list(any)
+  default  = []
+  nullable = false
 }
 
 variable "lambda_accessible" {
-  type    = bool
-  default = false
+  type     = bool
+  default  = false
+  nullable = false
 }
 
 variable "ro_for_higher_environments" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "lifecycle_images_to_keep" {
-  type    = number
-  default = 4
+  type     = number
+  default  = 4
+  nullable = false
 }
 
 variable "image_scanning" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "create_ecr_repository" {
-  type    = bool
-  default = false
+  type     = bool
+  default  = false
+  nullable = false
 }
