@@ -1,8 +1,14 @@
 # Changelog
 
+## [v0.0.3]
+
+### Changed
+
+- allow to set a custom repository name
+
 ## [v0.0.2]
 
-### Updated
+### Changed
 
 - reorganize project structure
 

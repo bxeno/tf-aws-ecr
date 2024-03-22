@@ -32,3 +32,8 @@ variable "image_scanning" {
   default  = true
   nullable = false
 }
+
+variable "name" {
+  type    = string
+  default = ""
+}
