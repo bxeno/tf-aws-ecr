@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "repo" {
-  name = var.service
+  name = local.name
 
   image_scanning_configuration {
     scan_on_push = var.image_scanning #tfsec:ignore:AWS023

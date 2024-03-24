@@ -25,6 +25,11 @@ variable "deployment" {
   nullable    = false
 }
 
+variable "name" {
+  type    = string
+  default = ""
+}
+
 variable "repo_principals_ro" {
   type     = list(any)
   default  = []

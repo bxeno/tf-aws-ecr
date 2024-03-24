@@ -3,6 +3,7 @@ module "ecr" {
 
   source = "./ecr"
 
+  name                       = var.name
   service                    = var.service
   repo_principals_ro         = var.repo_principals_ro
   lambda_accessible          = var.lambda_accessible
