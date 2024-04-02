@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.0.4]
+
+### Changed
+
+- allow to use custom lifecycle policy
+
 ## [v0.0.3]
 
 ### Changed

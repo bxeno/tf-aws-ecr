@@ -65,3 +65,8 @@ variable "create_ecr_repository" {
   default  = false
   nullable = false
 }
+
+variable "custom_lifecycle_policy_document" {
+  type    = string
+  default = ""
+}
