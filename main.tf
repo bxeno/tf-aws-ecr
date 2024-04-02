@@ -10,4 +10,6 @@ module "ecr" {
   ro_for_higher_environments = var.ro_for_higher_environments
   lifecycle_images_to_keep   = var.lifecycle_images_to_keep
   image_scanning             = var.image_scanning
+
+  custom_lifecycle_policy_document = var.custom_lifecycle_policy_document
 }

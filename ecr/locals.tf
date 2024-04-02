@@ -1,5 +1,6 @@
 locals {
-  name                     = coalesce(var.name, var.service)
+  name = coalesce(var.name, var.service)
+
   default_lifecycle_policy = <<EOF
 {
     "rules": [
@@ -31,5 +32,6 @@ locals {
     ]
 }
 EOF
-  lifecycle_policy         = coalesce(var.custom_lifecycle_policy_document, local.default_lifecycle_policy)
+
+  lifecycle_policy = coalesce(var.custom_lifecycle_policy_document, local.default_lifecycle_policy)
 }
