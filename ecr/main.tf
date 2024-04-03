@@ -32,37 +32,7 @@ resource "aws_ecr_repository_policy" "repo" {
 resource "aws_ecr_lifecycle_policy" "repo" {
   repository = aws_ecr_repository.repo.name
 
-  policy = <<EOF
-{
-    "rules": [
-        {
-            "rulePriority": 1,
-            "description": "Remove untagged images",
-            "selection": {
-                "tagStatus": "untagged",
-                "countType": "sinceImagePushed",
-                "countUnit": "days",
-                "countNumber": 1
-            },
-            "action": {
-                "type": "expire"
-            }
-        },
-        {
-            "rulePriority": 2,
-            "description": "Keep only ${var.lifecycle_images_to_keep} images",
-            "selection": {
-                "tagStatus": "any",
-                "countType": "imageCountMoreThan",
-                "countNumber": ${var.lifecycle_images_to_keep}
-            },
-            "action": {
-                "type": "expire"
-            }
-        }
-    ]
-}
-EOF
+  policy = local.lifecycle_policy
 }
 
 data "aws_iam_policy_document" "lambda_access" {

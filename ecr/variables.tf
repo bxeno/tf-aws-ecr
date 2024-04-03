@@ -37,3 +37,8 @@ variable "name" {
   type    = string
   default = ""
 }
+
+variable "custom_lifecycle_policy_document" {
+  type    = string
+  default = ""
+}
