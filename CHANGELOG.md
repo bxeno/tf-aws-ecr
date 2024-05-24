@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.0.5]
+
+### Changed
+
+- combine multiple repository policies into one policy
+
 ## [v0.0.4]
 
 ### Changed

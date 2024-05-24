@@ -6,54 +6,12 @@ resource "aws_ecr_repository" "repo" {
   }
 }
 
-data "aws_iam_policy_document" "repo" {
-  statement {
-    sid = "RO for higher environments"
-    actions = [
-      "ecr:BatchGetImage",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:ListImages"
-    ]
-    principals {
-      type        = "AWS"
-      identifiers = var.repo_principals_ro
-    }
-  }
-}
-
-resource "aws_ecr_repository_policy" "repo" {
-  count = var.ro_for_higher_environments ? 1 : 0
-
+resource "aws_ecr_repository_policy" "repository_policy" {
   repository = aws_ecr_repository.repo.name
-  policy     = data.aws_iam_policy_document.repo.json
+  policy     = data.aws_iam_policy_document.combined.json
 }
 
 resource "aws_ecr_lifecycle_policy" "repo" {
   repository = aws_ecr_repository.repo.name
-
-  policy = local.lifecycle_policy
-}
-
-data "aws_iam_policy_document" "lambda_access" {
-  statement {
-    sid    = "LambdaECRImageRetrievalPolicy"
-    effect = "Allow"
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:BatchGetImage",
-      "ecr:GetDownloadUrlForLayer"
-    ]
-    principals {
-      identifiers = ["lambda.amazonaws.com"]
-      type        = "Service"
-    }
-  }
-}
-
-resource "aws_ecr_repository_policy" "lambda_access" {
-  count = var.lambda_accessible ? 1 : 0
-
-  repository = aws_ecr_repository.repo.name
-  policy     = data.aws_iam_policy_document.lambda_access.json
+  policy     = local.lifecycle_policy
 }
