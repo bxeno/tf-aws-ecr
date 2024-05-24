@@ -33,6 +33,6 @@ data "aws_iam_policy_document" "lambda_access" {
 data "aws_iam_policy_document" "combined" {
   source_policy_documents = concat(
     var.ro_for_higher_environments ? [data.aws_iam_policy_document.ro_access.json] : [],
-    var.lambda_accessible ? [data.aws_iam_policy_document.lambda_access .json] : []
+    var.lambda_accessible ? [data.aws_iam_policy_document.lambda_access.json] : []
   )
 }
