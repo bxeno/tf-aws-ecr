@@ -1,15 +1,39 @@
-module "ecr" {
-  count = var.create_ecr_repository ? 1 : 0
+resource "aws_ecr_repository" "repo" {
+  name = join("-",
+    compact(
+      [
+        module.context.platform,
+        module.context.service,
+        var.name
+      ]
+    )
+  )
 
-  source = "./ecr"
+  force_delete = var.force_delete
 
-  name                       = var.name
-  service                    = var.service
-  repo_principals_ro         = var.repo_principals_ro
-  lambda_accessible          = var.lambda_accessible
-  ro_for_higher_environments = var.ro_for_higher_environments
-  lifecycle_images_to_keep   = var.lifecycle_images_to_keep
-  image_scanning             = var.image_scanning
+  image_scanning_configuration {
+    scan_on_push = var.image_scanning #tfsec:ignore:AWS023
+  }
 
-  custom_lifecycle_policy_document = var.custom_lifecycle_policy_document
+  tags = module.context.tags
+}
+
+resource "aws_ecr_repository_policy" "repo" {
+  count = sum(
+    [
+      length(var.read_aws_principals),
+      length(var.read_service_principals),
+      length(var.write_aws_principals),
+      length(var.write_service_principals)
+  ]) > 0 ? 1 : 0
+  repository = aws_ecr_repository.repo.name
+  policy     = data.aws_iam_policy_document.repo.json
+}
+
+resource "aws_ecr_lifecycle_policy" "repo" {
+  repository = aws_ecr_repository.repo.name
+  policy = coalesce(
+    try(jsondecode(var.custom_lifecycle_policy_document), var.custom_lifecycle_policy_document),
+    data.aws_ecr_lifecycle_policy_document.default_lifecycle_policy.json
+  )
 }
