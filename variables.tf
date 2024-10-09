@@ -84,7 +84,7 @@ variable "write_service_principals" {
 variable "lifecycle_images_to_keep" {
   description = "When using the default lifecyle policy how many images to keep"
   type        = number
-  default     = 4
+  default     = 10
   nullable    = false
 }
 

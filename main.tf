@@ -33,7 +33,7 @@ resource "aws_ecr_repository_policy" "repo" {
 resource "aws_ecr_lifecycle_policy" "repo" {
   repository = aws_ecr_repository.repo.name
   policy = coalesce(
-    try(jsondecode(var.custom_lifecycle_policy_document), var.custom_lifecycle_policy_document),
+    try(jsondecode(var.custom_lifecycle_policy_document).json, var.custom_lifecycle_policy_document),
     data.aws_ecr_lifecycle_policy_document.default_lifecycle_policy.json
   )
 }
