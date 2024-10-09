@@ -136,18 +136,21 @@ data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
     }
   }
 
-  rule {
-    priority    = 2
-    description = "Keep only ${var.lifecycle_images_to_keep} images"
+  dynamic "rule" {
+    for_each = var.lifecycle_images_to_keep > 0 ? [1] : []
+    content {
+      priority    = 2
+      description = "Keep only ${var.lifecycle_images_to_keep} images"
 
-    selection {
-      tag_status   = "any"
-      count_type   = "imageCountMoreThan"
-      count_number = var.lifecycle_images_to_keep
-    }
+      selection {
+        tag_status   = "any"
+        count_type   = "imageCountMoreThan"
+        count_number = var.lifecycle_images_to_keep
+      }
 
-    action {
-      type = "expire"
+      action {
+        type = "expire"
+      }
     }
   }
 }
