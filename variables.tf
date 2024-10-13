@@ -1,28 +1,22 @@
-variable "platform" {
-  description = "Platform name"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
-
-variable "region" {
-  description = "Region name"
-  type        = string
-}
-
-variable "service" {
-  description = "Service name"
-  type        = string
-}
-
-variable "deployment" {
-  description = "Deployment name"
-  type        = string
-  nullable    = true
-  default     = null
+variable "context" {
+  description = "The context to use for forming names and tags"
+  type = object(
+    {
+      platform          = string
+      environment       = string
+      service           = string
+      deployment        = string
+      element_delimiter = optional(string)
+      element_order     = optional(list(string))
+      required_elements = optional(list(string))
+      tags              = map(string)
+      stack             = string
+      short_stack       = string
+      ssm_stack         = string
+      full_environment  = string
+      full_service      = string
+    }
+  )
 }
 
 variable "name" {
