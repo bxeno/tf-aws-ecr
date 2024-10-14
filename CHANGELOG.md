@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.1.0]
+
+- Instead of building a context for a resource module we should just accept an existing context. This ensures consistency 
+in resource naming when creating resources
+
 ## [v1.0.0]
 
 ### Changed
