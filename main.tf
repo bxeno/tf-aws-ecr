@@ -148,24 +148,6 @@ resource "aws_ecr_repository_policy" "repo" {
 }
 
 data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
-  dynamic "rule" {
-    for_each = var.lifecycle_images_to_keep > 0 ? [1] : []
-    content {
-      priority    = 2
-      description = "Keep only ${var.lifecycle_images_to_keep} images"
-
-      selection {
-        tag_status   = "any"
-        count_type   = "imageCountMoreThan"
-        count_number = var.lifecycle_images_to_keep
-      }
-
-      action {
-        type = "expire"
-      }
-    }
-  }
-
   rule {
     priority    = 999
     description = "Remove untagged images"

@@ -75,13 +75,6 @@ variable "write_service_principals" {
   default     = []
 }
 
-variable "lifecycle_images_to_keep" {
-  description = "When using the default lifecyle policy how many images to keep"
-  type        = number
-  default     = 10
-  nullable    = false
-}
-
 variable "image_scanning" {
   description = "Enable image scanning on push"
   type        = bool
