@@ -28,7 +28,11 @@ data "aws_iam_policy_document" "repo" {
         "ecr:BatchGetImage",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
-        "ecr:ListImages"
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:DescribeImageScanFindings",
+        "ecr:ListTagsForResource",
+        "ecr:StartImageScan",
       ]
 
       principals {
@@ -56,7 +60,11 @@ data "aws_iam_policy_document" "repo" {
         "ecr:BatchGetImage",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
-        "ecr:ListImages"
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:DescribeImageScanFindings",
+        "ecr:ListTagsForResource",
+        "ecr:StartImageScan",
       ]
 
       principals {
