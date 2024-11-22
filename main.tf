@@ -33,6 +33,8 @@ data "aws_iam_policy_document" "repo" {
         "ecr:DescribeImageScanFindings",
         "ecr:ListTagsForResource",
         "ecr:StartImageScan",
+        # https://github.com/hashicorp/terraform-provider-aws/issues/35303
+        "ecr:DescribeRepositories",
       ]
 
       principals {
