@@ -1,3 +1,5 @@
+#trivy:ignore:AVD-AWS-0031 - Mutable Images - Still working through tagging structure
+#trivy:ignore:AVD-AWS-0033 - CMK usage - we aren't using cmk's much at the moment
 resource "aws_ecr_repository" "repo" {
   name = join("-",
     compact(
