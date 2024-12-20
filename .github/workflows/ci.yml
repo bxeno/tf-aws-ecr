@@ -1,0 +1,11 @@
+name: Module CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    uses: fatzebra/gh-workflows/.github/workflows/terraform_resource_module.yml@main
