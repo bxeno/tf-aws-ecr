@@ -1,3 +1,5 @@
+#trivy:ignore:AVD-AWS-0031 - Mutable Images - Still working through tagging structure
+#trivy:ignore:AVD-AWS-0033 - CMK usage - we aren't using cmk's much at the moment
 resource "aws_ecr_repository" "repo" {
   name = join("-",
     compact(
@@ -158,6 +160,24 @@ resource "aws_ecr_repository_policy" "repo" {
 }
 
 data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
+
+  rule {
+    priority    = 900
+    description = "Remove build cache images"
+
+    selection {
+      tag_status      = "tagged"
+      tag_prefix_list = ["cache"]
+      count_type      = "sinceImagePushed"
+      count_unit      = "days"
+      count_number    = 3
+    }
+
+    action {
+      type = "expire"
+    }
+  }
+
   rule {
     priority    = 999
     description = "Remove untagged images"
