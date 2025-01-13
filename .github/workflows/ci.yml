@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - main
+      - master
   pull_request:
 
 jobs:
   validate:
     uses: fatzebra/gh-workflows/.github/workflows/terraform_resource_module.yml@main
+    secrets: inherit
