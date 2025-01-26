@@ -116,7 +116,6 @@ data "aws_iam_policy_document" "repo" {
     }
   }
 
-
   dynamic "statement" {
     for_each = length(var.write_service_principals) > 0 ? [1] : []
     content {
@@ -147,6 +146,7 @@ data "aws_iam_policy_document" "repo" {
   }
 }
 
+#trivy:ignore:AVD-AWS-0032 - Conditional policy sets organisation access only Precondition handles enforcement
 resource "aws_ecr_repository_policy" "repo" {
   count = sum(
     [
@@ -155,11 +155,43 @@ resource "aws_ecr_repository_policy" "repo" {
       length(var.write_aws_principals),
       length(var.write_service_principals)
   ]) > 0 ? 1 : 0
+
   repository = aws_ecr_repository.repo.name
   policy     = data.aws_iam_policy_document.repo.json
+
+  lifecycle {
+    precondition {
+      condition = contains(
+        concat(
+          var.read_aws_principals,
+          var.write_aws_principals,
+          var.read_service_principals,
+          var.write_service_principals
+        ),
+        "*"
+      ) && length(var.allowed_organisation_ids) > 0
+      error_message = "Cannot use * principal if no organisations are defined to limit public access"
+    }
+  }
 }
 
 data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
+
+  # If a lower priority rule does nothing as its action then
+  # higher priority rules aren't applied on the image
+  dynamic "rule" {
+    for_each = var.locked_tags
+    content {
+      priority    = 10 + rule.key
+      description = "Always keep moving tag: ${rule.value}"
+      selection {
+        tag_status       = "tagged"
+        tag_pattern_list = [rule.value]
+        count_type       = "imageCountMoreThan"
+        count_number     = 1
+      }
+    }
+  }
 
   rule {
     priority    = 900
