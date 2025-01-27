@@ -37,7 +37,7 @@ variable "allowed_organisation_ids" {
   type        = list(string)
   default = [
     "o-cj474haxbs", # accounts@fatzebra.com.au - Management Account: 871500768402
-    "o-i01x90y5fw", # engineering+master@adatree.com.au - Management Account: 741634499280 
+    "o-i01x90y5fw", # engineering+master@adatree.com.au - Management Account: 741634499280
   ]
 }
 
@@ -79,7 +79,12 @@ variable "image_scanning" {
   description = "Enable image scanning on push"
   type        = bool
   default     = true
-  nullable    = false
+}
+
+variable "locked_tags" {
+  description = "A list of tags that can't be expired"
+  type        = list(string)
+  default     = ["latest", "stable", "edge", "prod", "sbox", "test", "staging"]
 }
 
 variable "custom_lifecycle_policy_document" {
