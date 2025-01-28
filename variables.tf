@@ -20,10 +20,15 @@ variable "context" {
 }
 
 variable "name" {
-  description = "The name of the repository"
+  description = "A suffix to append to the context to build a name"
   type        = string
-  nullable    = true
-  default     = null
+  default     = ""
+}
+
+variable "name_override" {
+  description = "A name to set as the full image name. Overrides the context setup"
+  type        = string
+  default     = ""
 }
 
 variable "force_delete" {
