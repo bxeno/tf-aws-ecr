@@ -25,7 +25,7 @@ resource "aws_ecr_repository" "repo" {
   lifecycle {
     precondition {
       error_message = "You cannont provide a value for name and name override"
-      condition     = var.name_override != "" && var.name != ""
+      condition     = var.name_override != "" || var.name != ""
     }
   }
 }
