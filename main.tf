@@ -1,13 +1,16 @@
 #trivy:ignore:AVD-AWS-0031 - Mutable Images - Still working through tagging structure
 #trivy:ignore:AVD-AWS-0033 - CMK usage - we aren't using cmk's much at the moment
 resource "aws_ecr_repository" "repo" {
-  name = join("-",
-    compact(
-      [
-        var.context.platform,
-        var.context.service,
-        var.name
-      ]
+  name = coalesce(
+    var.name_override,
+    join("-",
+      compact(
+        [
+          var.context.platform,
+          var.context.service,
+          var.name
+        ]
+      )
     )
   )
 
@@ -18,6 +21,13 @@ resource "aws_ecr_repository" "repo" {
   }
 
   tags = var.context.tags
+
+  lifecycle {
+    precondition {
+      error_message = "You cannont provide a value for name and name override"
+      condition     = var.name_override != "" && var.name != ""
+    }
+  }
 }
 
 data "aws_iam_policy_document" "repo" {
