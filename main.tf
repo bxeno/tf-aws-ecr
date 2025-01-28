@@ -25,7 +25,11 @@ resource "aws_ecr_repository" "repo" {
   lifecycle {
     precondition {
       error_message = "You cannont provide a value for name and name override"
-      condition     = var.name_override != "" || var.name != ""
+      condition = (
+        (var.name_override == "" && var.name != "")
+        || (var.name_override != "" && var.name == "")
+        || (var.name_override == "" && var.name == "")
+      )
     }
   }
 }
@@ -171,15 +175,30 @@ resource "aws_ecr_repository_policy" "repo" {
 
   lifecycle {
     precondition {
-      condition = contains(
-        concat(
-          var.read_aws_principals,
-          var.write_aws_principals,
-          var.read_service_principals,
-          var.write_service_principals
-        ),
-        "*"
-      ) && length(var.allowed_organisation_ids) > 0
+      condition = (
+        (
+          contains(
+            concat(
+              var.read_aws_principals,
+              var.write_aws_principals,
+              var.read_service_principals,
+              var.write_service_principals
+            ),
+            "*"
+          ) && length(var.allowed_organisation_ids) > 0
+        ) ||
+        (
+          !contains(
+            concat(
+              var.read_aws_principals,
+              var.write_aws_principals,
+              var.read_service_principals,
+              var.write_service_principals
+            ),
+            "*"
+          )
+        )
+      )
       error_message = "Cannot use * principal if no organisations are defined to limit public access"
     }
   }
