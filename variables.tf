@@ -55,6 +55,9 @@ variable "read_aws_principals" {
     "arn:aws:iam::775691310813:root", # FZ Sandbox
     "arn:aws:iam::393255818646:root", # FZ Prod
     "arn:aws:iam::840853425342:root", # FZ Interconnet
+    "arn:aws:iam::340752817472:root", # Integration Staging
+    "arn:aws:iam::881490128486:root", # Integration Sandbox
+    "arn:aws:iam::872515254883:root", # Integration Production
   ]
 }
 
