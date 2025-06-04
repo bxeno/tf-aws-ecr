@@ -212,13 +212,65 @@ data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
     for_each = var.locked_tags
     content {
       priority    = 10 + rule.key
-      description = "Always keep moving tag: ${rule.value}"
+      description = "Always keep mutable tag used for deployments: ${rule.value}"
       selection {
         tag_status       = "tagged"
         tag_pattern_list = [rule.value]
         count_type       = "imageCountMoreThan"
         count_number     = 1
       }
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.deploy_tags
+    content {
+      priority    = rule.value.priority
+      description = "Preserve [${rule.value.count}] ${rule.value.key} Deployed images"
+      selection {
+        tag_status       = "tagged"
+        tag_pattern_list = [rule.value.pattern]
+        count_type       = "imageCountMoreThan"
+        count_number     = rule.value.count
+      }
+    }
+  }
+
+  rule {
+    priority    = 100
+    description = "Preserve library images for 180 days [<YYYY.MM.DDHHmm>]"
+
+    selection {
+      tag_status       = "tagged"
+      tag_pattern_list = ["2*.*.*"]
+      count_type       = "sinceImagePushed"
+      count_unit       = "days"
+      count_number     = 180
+    }
+  }
+
+  rule {
+    priority    = 101
+    description = "Preserve PR images for 2 weeks [pr-*]"
+
+    selection {
+      tag_status       = "tagged"
+      tag_pattern_list = ["pr-*"]
+      count_type       = "sinceImagePushed"
+      count_unit       = "days"
+      count_number     = 14
+    }
+  }
+
+  rule {
+    priority    = 110
+    description = "Preserve 10 sha-* images"
+
+    selection {
+      tag_status       = "tagged"
+      tag_pattern_list = ["sha-*"]
+      count_type       = "imageCountMoreThan"
+      count_number     = 10
     }
   }
 
@@ -248,6 +300,22 @@ data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
       count_type   = "sinceImagePushed"
       count_unit   = "days"
       count_number = 1
+    }
+
+    action {
+      type = "expire"
+    }
+  }
+
+  rule {
+    priority    = 1000
+    description = "Remove any images that don't match these tags at all"
+
+    selection {
+      tag_status   = "any"
+      count_type   = "sinceImagePushed"
+      count_unit   = "days"
+      count_number = 10
     }
 
     action {

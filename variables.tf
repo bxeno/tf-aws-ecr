@@ -70,7 +70,7 @@ variable "write_aws_principals" {
   description = "A list of AWS Principals (generally account roots) that can have read write access"
   type        = list(string)
   default = [
-    "arn:aws:iam::748746525051:root", # FZ Test
+    "arn:aws:iam::748746525051:root", # FZ Test due to buildkite agents running in that account - can be removed once in GHA only
   ]
 }
 
@@ -89,7 +89,39 @@ variable "image_scanning" {
 variable "locked_tags" {
   description = "A list of tags that can't be expired"
   type        = list(string)
-  default     = ["latest", "stable", "edge", "prod", "sbox", "test", "staging"]
+  default     = ["latest", "stable", "edge", "prod", "sbox", "test", "staging", "fz-test", "fz-sbox", "fz-prod", "int-staging", "int-sbox", "int-prod"]
+}
+
+variable "deploy_tags" {
+  description = "A list of maps of tags to keep for previous deployments"
+  type = map(object({
+    pattern  = string
+    count    = number
+    priority = number
+  }))
+
+  default = {
+    production = {
+      pattern  = "env-*-prod-*"
+      count    = 10
+      priority = 50
+    }
+    sandbox = {
+      pattern  = "env-*-sbox-*"
+      count    = 10
+      priority = 55
+    }
+    test = {
+      pattern  = "env-*-test-*"
+      count    = 10
+      priority = 60
+    }
+    staging = {
+      pattern  = "env-*-staging-*"
+      count    = 10
+      priority = 65
+    }
+  }
 }
 
 variable "custom_lifecycle_policy_document" {
