@@ -226,7 +226,7 @@ data "aws_ecr_lifecycle_policy_document" "default_lifecycle_policy" {
     for_each = var.deploy_tags
     content {
       priority    = rule.value.priority
-      description = "Preserve [${rule.value.count}] ${rule.value.key} Deployed images"
+      description = "Preserve [${rule.value.count}] ${rule.key} Deployed images"
       selection {
         tag_status       = "tagged"
         tag_pattern_list = [rule.value.pattern]
