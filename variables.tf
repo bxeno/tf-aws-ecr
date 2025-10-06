@@ -41,8 +41,7 @@ variable "allowed_organisation_ids" {
   description = "AWS organisation filter applied to all principals on the read only policy"
   type        = list(string)
   default = [
-    "o-cj474haxbs", # accounts@fatzebra.com.au - Management Account: 871500768402
-    "o-i01x90y5fw", # engineering+master@adatree.com.au - Management Account: 741634499280
+    "o-l4rbr4bg7c", # roughscale-ctl - Management Account: 533267344931
   ]
 }
 
@@ -51,10 +50,7 @@ variable "read_aws_principals" {
   description = "A list of AWS Principals (generally account roots) that can have read only access"
   type        = list(string)
   default = [
-    "arn:aws:iam::748746525051:root", # FZ Test
-    "arn:aws:iam::775691310813:root", # FZ Sandbox
-    "arn:aws:iam::393255818646:root", # FZ Prod
-    "arn:aws:iam::840853425342:root", # FZ Interconnet
+    "arn:aws:iam::851725426575:root", # RSX Sandbox
   ]
 }
 
