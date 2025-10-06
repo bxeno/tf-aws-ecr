@@ -66,7 +66,7 @@ variable "write_aws_principals" {
   description = "A list of AWS Principals (generally account roots) that can have read write access"
   type        = list(string)
   default = [
-    "arn:aws:iam::748746525051:root", # FZ Test due to buildkite agents running in that account - can be removed once in GHA only
+    "arn:aws:iam::851725426575:root", # RSX sandbox. not required, but this is due to buildkite agents running in that account - can be removed once in GHA only
   ]
 }
 
